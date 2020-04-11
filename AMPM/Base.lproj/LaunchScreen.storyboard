@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ampmlogo" translatesAutoresizingMaskIntoConstraints="NO" id="CV8-JY-ubL">
+                                <rect key="frame" x="87" y="227" width="240" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="DgR-va-6BW"/>
+                                    <constraint firstAttribute="width" constant="240" id="R6S-df-QHL"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AMPM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08F-Ul-aW5">
+                                <rect key="frame" x="57" y="482" width="337" height="69"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="69" id="75l-9F-Mcs"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="51"/>
+                                <color key="textColor" red="0.0" green="0.45211219790000001" blue="0.75525826220000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ASISTENCIA MÉDICA" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdc-GI-FtD">
+                                <rect key="frame" x="87" y="556" width="279" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="ePC-EI-cWK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                <color key="textColor" red="0.95719093079999995" green="0.54333412650000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="08F-Ul-aW5" firstAttribute="top" secondItem="CV8-JY-ubL" secondAttribute="bottom" constant="15" id="C5Z-ka-kkU"/>
+                            <constraint firstItem="rdc-GI-FtD" firstAttribute="top" secondItem="08F-Ul-aW5" secondAttribute="bottom" constant="5" id="JSE-Ms-lOa"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="08F-Ul-aW5" secondAttribute="trailing" constant="20" id="Nsm-yP-Ddu"/>
+                            <constraint firstItem="rdc-GI-FtD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="87" id="UG0-Qx-GYJ"/>
+                            <constraint firstItem="CV8-JY-ubL" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="f4m-M6-iYm"/>
+                            <constraint firstItem="08F-Ul-aW5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="57" id="i43-sW-ZeJ"/>
+                            <constraint firstItem="CV8-JY-ubL" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-101" id="joo-Ow-tXe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rdc-GI-FtD" secondAttribute="trailing" constant="48" id="xVY-f6-50N"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="52.173913043478265" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ampmlogo" width="1024" height="1024"/>
+    </resources>
+</document>

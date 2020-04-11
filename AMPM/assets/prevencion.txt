@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h2>Prevención</h2>
+    <ul>
+      <li>•Lavarse las manos frecuentemente con agua y jabón o utilizar gel con base de alcohol al 70%. </li>
+      <li>•Usar la técnica estornudo de etiqueta al toser o estornudar, es decir, cubrirse la nariz y boca con el ángulo interno del brazo. </li>
+      <li>•No escupir y no tocarse la cara con las manos sucias, sobre todo nariz, boca y ojos. </li>
+      <li>•Limpiar y desinfectar superficies y objetos de uso común: perillas de puertas, teléfonos, pasamanos, mesas, </li>
+      <li>•Acudir al médico cuando se tienen padecimientos respiratorios (fiebre mayor a 38°C, dolor de cabeza, dolor de garganta, escurrimiento nasal, etc). </li>
+      <li>•Quedarse en casa cuando se tiene una infección respiratoria y seguir las indicaciones del médico. </li>
+      <li>•Consumir muchas frutas y verduras, fomentar hábitos y estilos de vida saludables.</li>
+      <li>•De ser posible, evitar contacto con personas que tengan enfermedades respiratorias.</li>
+    </ul>
+
+    <h2>MEDIDAS DE HIGIENE RESPIRATORIA Y SANA DISTANCIA</h2>
+
+    <ul>
+      <li>•Lavado frecuente de manos:</li>
+      <ul>
+        <li>-Preferentemente con agua y jabón (de preferencia líquido) y que al menos dure 30 segundos </li>
+        <li>-En caso de no contar con agua y jabón se puede usar Gel anti bacterial con base alcohol al 70%</li>
+      </ul>
+
+      <li>•Etiqueta respiratoria </li>
+      <ul>
+        <li>-Tapar nariz y boca al toser o estornudar, con el ángulo interno del codo</li>
+        <li>-Lavar las manos después de hacerlo.</li>
+      </ul>
+
+      <li>•Saludo a distancia </li>
+      <ul>
+        <li>-Evitar el saludo de mano, abrazo y beso </li>
+        <li>-No salir de casa en casa a lugares que no sean estrictamente necesarios</li>
+        <li>-Manten una distancia de al menos 1.5 m</li>
+        <li>-Desinfecta superficies con cloro de uso domestico diluido en agua por lo menos una vez al día</li>
+        <li>-Diluye una cucharada (70ml ) de cloro por cada litro de agua</li>
+        <li>-Recuerda que aun no hay medicamentos específicos para esta enfermedad, no te auto mediques </li>
+        <li>-No te toques la cara, ojos o nariz, si necesitas hacerlo, lávate las manos antes</li>
+      </ul>
+    </ul>
+  </body>
+</html>
