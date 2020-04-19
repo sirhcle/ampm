@@ -17,6 +17,7 @@
 		B0318E092428542000A2174F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0318E082428542000A2174F /* Assets.xcassets */; };
 		B0318E0C2428542000A2174F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0318E0A2428542000A2174F /* LaunchScreen.storyboard */; };
 		B03522FE24370644009BAFDE /* ProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03522FD24370644009BAFDE /* ProgressHUD.swift */; };
+		B0379865244578220077B7B9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0379864244578220077B7B9 /* CoreLocation.framework */; };
 		B0416D302428597800544C5F /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0416D2F2428597800544C5F /* TestViewController.swift */; };
 		B0416D32242871DB00544C5F /* PrevencionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0416D31242871DB00544C5F /* PrevencionViewController.swift */; };
 		B0416D34242896FF00544C5F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0416D33242896FF00544C5F /* WebKit.framework */; };
@@ -35,6 +36,7 @@
 		B071DCD0243AAEED00B1CE1F /* sleep.png in Resources */ = {isa = PBXBuildFile; fileRef = B071DCCA243AAEED00B1CE1F /* sleep.png */; };
 		B071DCD1243AAEED00B1CE1F /* cough2.png in Resources */ = {isa = PBXBuildFile; fileRef = B071DCCB243AAEED00B1CE1F /* cough2.png */; };
 		B071DCD2243AAEED00B1CE1F /* clean.png in Resources */ = {isa = PBXBuildFile; fileRef = B071DCCC243AAEED00B1CE1F /* clean.png */; };
+		B07DEA1A244AD40B00FCE841 /* VideoChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07DEA19244AD40B00FCE841 /* VideoChatViewController.swift */; };
 		B09DB04F24412EF2004D3AF5 /* VideoConsultaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DB04E24412EF2004D3AF5 /* VideoConsultaViewController.swift */; };
 		B0A50846242C9C3E0057E019 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A50845242C9C3E0057E019 /* RegisterViewController.swift */; };
 		B0B896242429C25000870887 /* prevencion.txt in Resources */ = {isa = PBXBuildFile; fileRef = B0B896232429C25000870887 /* prevencion.txt */; };
@@ -56,6 +58,7 @@
 		B0318E0B2428542000A2174F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B0318E0D2428542000A2174F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B03522FD24370644009BAFDE /* ProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHUD.swift; sourceTree = "<group>"; };
+		B0379864244578220077B7B9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B0416D2F2428597800544C5F /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		B0416D31242871DB00544C5F /* PrevencionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrevencionViewController.swift; sourceTree = "<group>"; };
 		B0416D33242896FF00544C5F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -74,6 +77,7 @@
 		B071DCCA243AAEED00B1CE1F /* sleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sleep.png; sourceTree = "<group>"; };
 		B071DCCB243AAEED00B1CE1F /* cough2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cough2.png; sourceTree = "<group>"; };
 		B071DCCC243AAEED00B1CE1F /* clean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clean.png; sourceTree = "<group>"; };
+		B07DEA19244AD40B00FCE841 /* VideoChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChatViewController.swift; sourceTree = "<group>"; };
 		B09DB04E24412EF2004D3AF5 /* VideoConsultaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConsultaViewController.swift; sourceTree = "<group>"; };
 		B0A50845242C9C3E0057E019 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B0B896232429C25000870887 /* prevencion.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = prevencion.txt; sourceTree = "<group>"; };
@@ -89,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0379865244578220077B7B9 /* CoreLocation.framework in Frameworks */,
 				B0416D34242896FF00544C5F /* WebKit.framework in Frameworks */,
 				6E068A9B5FB8B3B5CA3940FE /* Pods_AMPM.framework in Frameworks */,
 			);
@@ -100,6 +105,7 @@
 		038FB7C834C41BBF717C9CE8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0379864244578220077B7B9 /* CoreLocation.framework */,
 				B0416D33242896FF00544C5F /* WebKit.framework */,
 				947D46F53FC7B53D65270996 /* Pods_AMPM.framework */,
 			);
@@ -134,6 +140,7 @@
 				B0318E032428541E00A2174F /* ViewController.swift */,
 				B0D82AAD243ED86B0090DF86 /* UsersListViewController.swift */,
 				B09DB04E24412EF2004D3AF5 /* VideoConsultaViewController.swift */,
+				B07DEA19244AD40B00FCE841 /* VideoChatViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -371,6 +378,7 @@
 				B0A50846242C9C3E0057E019 /* RegisterViewController.swift in Sources */,
 				B066EC37243C2FD900007E36 /* TestModel.swift in Sources */,
 				B0416D302428597800544C5F /* TestViewController.swift in Sources */,
+				B07DEA1A244AD40B00FCE841 /* VideoChatViewController.swift in Sources */,
 				B0318E022428541E00A2174F /* SceneDelegate.swift in Sources */,
 				B09DB04F24412EF2004D3AF5 /* VideoConsultaViewController.swift in Sources */,
 			);
@@ -521,15 +529,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 93MTL2WL82;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AMPM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = mx.ampm.chr.AMPM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -545,15 +554,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 93MTL2WL82;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AMPM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = mx.ampm.chr.AMPM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

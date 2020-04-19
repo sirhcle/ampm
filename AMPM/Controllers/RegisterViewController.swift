@@ -15,6 +15,7 @@ import FirebaseFirestore
 import CFAlertViewController
 import Loaf
 import RealmSwift
+import CoreLocation
 
 protocol RegisterDelegate {
     func registerSucces(curp: String)
@@ -27,6 +28,8 @@ class RegisterViewController: UIViewController {
     var eurekaForm: FormViewController! = FormViewController()
     var delegate: RegisterDelegate!
     var form:Eureka.Form!
+    let locationManager = CLLocationManager()
+    let colorEditing = UIColor.init(red: 174.0/255.0, green: 204.0/255.0, blue: 201.0/255.0, alpha: 1.0)
     
     override func viewDidLayoutSubviews() {
         self.eurekaForm.view.frame.size.width = self.viewContainer.frame.size.width
@@ -34,6 +37,16 @@ class RegisterViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /** obtener localización **/
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.requestWhenInUseAuthorization()
+
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
         
         form = self.eurekaForm.form
         
@@ -53,8 +66,14 @@ class RegisterViewController: UIViewController {
             if !row.isValid {
                 cell.titleLabel?.textColor = .red
             }
+        }.onCellHighlightChanged({ (cell, row) in
             
-        }
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
+        })
 
         <<< TextRow(){ row in
             row.title = "Apellido materno"
@@ -65,7 +84,14 @@ class RegisterViewController: UIViewController {
             if cell.textField.text!.count > 50 {
                 row.value?.removeLast()
             }
-        }
+        }.onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
+        })
 
         <<< TextRow(){ row in
             row.title = "Nombre(s)"
@@ -81,7 +107,14 @@ class RegisterViewController: UIViewController {
             if !row.isValid {
                 cell.titleLabel?.textColor = .red
             }
-        }
+        }.onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
+        })
             
         <<< SegmentedRow<String>() {
             $0.title = "Sexo"
@@ -90,7 +123,8 @@ class RegisterViewController: UIViewController {
             $0.tag = "sexo"
         }.cellUpdate { cell, row in
             let titleColor = UIColor.init(red: 0.0/255.0, green: 117.0/255.0, blue: 189.0/255.0, alpha: 1.0)
-            let segmentedSelected = UIColor.init(red: 242.0/255.0, green: 138.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+            let segmentedSelected = UIColor.lightGray
+//            let segmentedSelected = UIColor.init(red: 242.0/255.0, green: 138.0/255.0, blue: 0.0/255.0, alpha: 1.0)
             let segmentedNormal = UIColor.white
             
             cell.titleLabel?.textColor = titleColor
@@ -142,6 +176,13 @@ class RegisterViewController: UIViewController {
             row.value = "0"
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
 
         <<< TextRow(){ row in
@@ -170,6 +211,13 @@ class RegisterViewController: UIViewController {
             }
         }).onChange({ (row) in
             row.cell.textField.text = row.cell.textField.text?.uppercased()
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
         
 
@@ -183,6 +231,13 @@ class RegisterViewController: UIViewController {
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
             cell.textField.keyboardType = .numberPad
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
 
         <<< TextRow(){ row in
@@ -191,6 +246,13 @@ class RegisterViewController: UIViewController {
             row.value = ""
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
 
         <<< TextRow(){ row in
@@ -199,6 +261,13 @@ class RegisterViewController: UIViewController {
             row.value = ""
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
 
         <<< TextRow(){ row in
@@ -207,6 +276,13 @@ class RegisterViewController: UIViewController {
             row.value = ""
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
 
         <<< TextRow(){ row in
@@ -215,6 +291,13 @@ class RegisterViewController: UIViewController {
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
             row.value = ""
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
 
         <<< TextRow(){ row in
@@ -223,6 +306,13 @@ class RegisterViewController: UIViewController {
             row.value = ""
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
 
         <<< TextRow(){ row in
@@ -232,12 +322,21 @@ class RegisterViewController: UIViewController {
         }.cellUpdate({ (cell, row) in
             self.configStyles(cell: cell, row: row)
             cell.textField.keyboardType = .numberPad
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = self.colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
         
         <<< ButtonRow() { row in
             row.title = "Registrarse"
             row.onCellSelection(self.registrarse)
-        }
+        }.cellSetup({ (cell, row) in
+            cell.tintColor = UIColor.init(red: 242.0/255.0, green: 138.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+        })
         
         self.viewContainer.addSubview(eurekaForm.view)
     }
@@ -252,8 +351,6 @@ class RegisterViewController: UIViewController {
     }
     
     func registrarse(cell: ButtonCellOf<String>, row: ButtonRow) {
-        
-        ProgressHUD.sharedInstance.show()
         
         let formValues = form.values()
         
@@ -273,6 +370,7 @@ class RegisterViewController: UIViewController {
 
             return
         }
+        ProgressHUD.sharedInstance.show()
         
         let formatter = DateFormatter()
         // initially set the format based on your datepicker date / server String
@@ -319,7 +417,9 @@ class RegisterViewController: UIViewController {
                 "condado": dataRegister.condado,
                 "ciudad": dataRegister.ciudad,
                 "calle": dataRegister.calle,
-                "telefono": dataRegister.telefono
+                "telefono": dataRegister.telefono,
+                "latitud":(self.locationManager.location?.coordinate.latitude ?? "")!,
+                "longitud":(self.locationManager.location?.coordinate.longitude ?? "")!
                 
             ]) { error in
                 if let err = error {
@@ -357,10 +457,13 @@ class RegisterViewController: UIViewController {
     @IBAction func closeView(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-    
+}
 
-    
-
+extension RegisterViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+    }
 }
 
 extension RegisterViewController: UITextFieldDelegate {

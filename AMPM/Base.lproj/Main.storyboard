@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dsl-XZ-jrh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dsl-XZ-jrh">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -50,33 +50,44 @@
                     <view key="view" contentMode="scaleToFill" id="AgA-7r-Neg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="64A-JE-hxH">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <wkWebViewConfiguration key="configuration">
-                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                    <wkPreferences key="preferences"/>
-                                </wkWebViewConfiguration>
-                            </wkWebView>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="64A-JE-hxH" firstAttribute="leading" secondItem="Hm5-ok-pfI" secondAttribute="leading" id="9Rx-ax-kGv"/>
-                            <constraint firstItem="64A-JE-hxH" firstAttribute="trailing" secondItem="Hm5-ok-pfI" secondAttribute="trailing" id="Gxw-J3-6He"/>
-                            <constraint firstItem="64A-JE-hxH" firstAttribute="bottom" secondItem="Hm5-ok-pfI" secondAttribute="bottom" id="XuU-bn-GIo"/>
-                            <constraint firstItem="64A-JE-hxH" firstAttribute="top" secondItem="Hm5-ok-pfI" secondAttribute="top" id="baT-NN-C6a"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Hm5-ok-pfI"/>
                     </view>
                     <navigationItem key="navigationItem" title="Test" id="fvY-FJ-3MI"/>
-                    <connections>
-                        <outlet property="webView" destination="64A-JE-hxH" id="HJS-qv-dhW"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RA6-uU-9dR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-171.01449275362319" y="2326.3392857142858"/>
+        </scene>
+        <!--Video Chat View Controller-->
+        <scene sceneID="UdO-pe-Iwh">
+            <objects>
+                <viewController storyboardIdentifier="VideoChatViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6gw-O9-287" customClass="VideoChatViewController" customModule="AMPM" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nj6-2c-Dyl">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TWq-1C-Vv1">
+                                <rect key="frame" x="129" y="399" width="171" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Inicia chat">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="openJitsiMeetWithSender:" destination="6gw-O9-287" eventType="touchUpInside" id="epr-ud-2af"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Bll-Bh-05A"/>
+                    </view>
+                    <connections>
+                        <outlet property="videoButton" destination="TWq-1C-Vv1" id="Iwb-Ex-RLp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Dv-v6-2vc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-171.01449275362319" y="3012.7232142857142"/>
         </scene>
         <!--Users List View Controller-->
         <scene sceneID="kDx-MK-XzZ">
@@ -566,7 +577,6 @@
             <point key="canvasLocation" x="1687" y="917"/>
         </scene>
     </scenes>
-    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
         <image name="addUser" width="32" height="32"/>
         <image name="group" width="32" height="32"/>
@@ -574,4 +584,5 @@
         <image name="question" width="24" height="24"/>
         <image name="test" width="24" height="24"/>
     </resources>
+    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

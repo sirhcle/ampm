@@ -41,6 +41,11 @@ class ProgressHUD {
         KRProgressHUD.showSuccess(withMessage: withMessage)
     }
     
+    func success(withMessage: String, withDuration: Float) {
+        KRProgressHUD.set(duration: Double(withDuration))
+        KRProgressHUD.showSuccess(withMessage: withMessage)
+    }
+    
     func dismiss() {
         KRProgressHUD.dismiss()
     }
@@ -48,6 +53,19 @@ class ProgressHUD {
     func showError(withMessage: String) {
         KRProgressHUD.set(duration: 3.0)
         KRProgressHUD.showError(withMessage: withMessage)
+    }
+    
+    func showErrorWithDuration(withMessage: String, duration: Float, dismissOnTouch:Bool? = false) {
+        KRProgressHUD.set(duration: Double(duration))
+        KRProgressHUD.showError(withMessage: withMessage)
+        if dismissOnTouch! {
+            self.dismissOnTuch()
+        }
+        
+    }
+    
+    func dismissOnTuch() {
+        KRProgressHUD.dismiss()
     }
     
 }

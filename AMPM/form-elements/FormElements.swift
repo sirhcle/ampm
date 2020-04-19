@@ -16,6 +16,7 @@ class FormElements {
     class func TextRowElement(parameters: TextRowConfiguration) -> TextRow {
         let textfieldColor = UIColor.init(red: 242.0/255.0, green: 138.0/255.0, blue: 0.0/255.0, alpha: 1.0)
         let titleColor = UIColor.init(red: 0.0/255.0, green: 117.0/255.0, blue: 189.0/255.0, alpha: 1.0)
+        let colorEditing = UIColor.init(red: 174.0/255.0, green: 204.0/255.0, blue: 201.0/255.0, alpha: 1.0)
         
         return TextRow() { row in
             row.title = parameters.title
@@ -23,14 +24,29 @@ class FormElements {
         }.cellUpdate({ (cell, row) in
             cell.titleLabel?.textColor = titleColor
             cell.textField.textColor = textfieldColor
+        }).onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
         })
     }
     
     class func TextRowElement(parameters: TextRowConfiguration, keyboardType: UIKeyboardType) -> TextRow {
+        let colorEditing = UIColor.init(red: 174.0/255.0, green: 204.0/255.0, blue: 201.0/255.0, alpha: 1.0)
         
         return self.TextRowElement(parameters: parameters).cellSetup { (cell, row) in
             cell.textField.keyboardType = keyboardType
-        }
+        }.onCellHighlightChanged({ (cell, row) in
+            
+            if cell.textField.isEditing {
+                cell.backgroundColor = colorEditing
+            } else {
+                cell.backgroundColor = UIColor.white
+            }
+        })
         
     }
     
@@ -58,6 +74,8 @@ class FormElements {
             $0.tag = parameters.tag
         }.cellUpdate { cell, row in
             cell.titleLabel?.textColor = titleColor
+            cell.titleLabel?.numberOfLines = 0
+            
             cell.segmentedControl.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
             cell.segmentedControl.backgroundColor = segmentedSelected
             cell.segmentedControl.tintColor = titleColor

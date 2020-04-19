@@ -24,7 +24,23 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>The camera is needed for making calls</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>AMPM requiere utilizar su ubicación con fines estadísticos, ¿autorizas acceso a tu ubicación?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>AMPM requiere utilizar su ubicación con fines estadísticos, ¿autorizas acceso a tu ubicación?</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The microphone is needed for making calls</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -44,6 +60,11 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>voip</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

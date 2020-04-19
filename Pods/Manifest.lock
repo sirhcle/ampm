@@ -261,6 +261,7 @@ PODS:
     - gRPC-Core/Interface (= 1.21.0)
     - nanopb (~> 0.3)
   - gRPC-Core/Interface (1.21.0)
+  - JitsiMeetSDK (2.7.0)
   - KRActivityIndicatorView (3.0.5)
   - KRProgressHUD (3.4.5):
     - KRActivityIndicatorView (= 3.0.5)
@@ -286,6 +287,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Firestore
   - FirebaseFirestoreSwift
+  - JitsiMeetSDK
   - KRProgressHUD
   - Loaf
   - RAMAnimatedTabBarController
@@ -312,6 +314,7 @@ SPEC REPOS:
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
+    - JitsiMeetSDK
     - KRActivityIndicatorView
     - KRProgressHUD
     - leveldb-library
@@ -342,6 +345,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: ad0f3b691c67909d03a3327cc205222ab8f42e0e
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
+  JitsiMeetSDK: e09c2864b89fb3ac5f6733f6f85218bccb2c50be
   KRActivityIndicatorView: 912bc0413d98340f384b12a4e1e6aa8f42fb377d
   KRProgressHUD: df4cdc3a1baf708d4276a089ee34d133fa9a6f3e
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
@@ -352,6 +356,6 @@ SPEC CHECKSUMS:
   Realm: e125f464884cda953ebefe70c671b75b03b81b9b
   RealmSwift: 33656a42bd300959a081fc13347376bc478071af
 
-PODFILE CHECKSUM: c685198473194815f451a493f102eea81e7aaa82
+PODFILE CHECKSUM: 03ad16299191c710903974fa157ef6af0f67faa9
 
 COCOAPODS: 1.8.4
