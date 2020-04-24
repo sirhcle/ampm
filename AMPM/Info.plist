@@ -33,6 +33,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>$(PRODUCT_NAME) user your calendar.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>The camera is needed for making calls</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

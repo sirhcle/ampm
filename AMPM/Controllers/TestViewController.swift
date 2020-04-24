@@ -76,7 +76,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
                     self.peso = row.baseValue as? String
                     self.calculaasaCorporal()
             })
-            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "masaCorporal", title: "Índice de masa corporal"))
+            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "masaCorporal", title: "Índice de Masa Corporal (IMC)"))
                 
         
         //MARK: - SECCION 2
@@ -98,10 +98,10 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         
 
         //MARK: - SECCCION 3
-        form +++ Section("Test para síntomas COVID19")
+        form +++ Section("TEST PARA SÍNTOMAS COVID-19")
             
             //PREGUNTA 1
-            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "1.¿Estuve en contacto con personas con COVID19?"))
+            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "1.¿Estuve en contacto con personas con COVID-19?"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "", options: ["Si", "No"], value: "No", tag: "pregunta1"))
             
         
@@ -114,7 +114,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "", options: ["Si", "No"], value: "No", tag: "pregunta3"))
         
             //PREGUNTA 4
-            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "¿Presento los siguientes síntomas:?"))
+            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "¿Presento los siguientes síntomas?"))
             
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "3. Fiebre", options: ["Si", "No"], value: "No", tag: "pregunta4"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "4. Tos", options: ["Si", "No"], value: "No", tag: "pregunta5"))
@@ -128,10 +128,10 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "11. Debilidad y malestar en general", options: ["Si", "No"], value: "No", tag: "pregunta12"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "12. Secreción nasal", options: ["Si", "No"], value: "No", tag: "pregunta13"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "13. Conjuntivitis", options: ["Si", "No"], value: "No", tag: "pregunta14"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "14. Dolor en el pecho, sensaciónde falta de aire", options: ["Si", "No"], value: "No", tag: "pregunta15"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "14. Dolor en el pecho, sensación de falta de aire", options: ["Si", "No"], value: "No", tag: "pregunta15"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "15. Aumento excesivo en la producción de moco y/o flemas", options: ["Si", "No"], value: "No", tag: "pregunta16"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "16. Fiebre dificil de controlar", options: ["Si", "No"], value: "No", tag: "pregunta17"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "17. Escalofrio", options: ["Si", "No"], value: "No", tag: "pregunta18"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "16. Fiebre difícil de controlar", options: ["Si", "No"], value: "No", tag: "pregunta17"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "17. Escalofrío", options: ["Si", "No"], value: "No", tag: "pregunta18"))
             
         
             <<< ButtonRow(){ row in
@@ -175,9 +175,6 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
               
             }
         }
-        
-        
-        
     }
     
     func calculaasaCorporal() {
@@ -211,6 +208,29 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             row.baseCell.isUserInteractionEnabled = userRegistered
         }
         
+        if userRegistered {
+            let realm = try! Realm()
+            if let registered = realm.objects(Test.self).filter("curp == '\(curp!)'").first {
+                
+                let laterDate = Date()
+                let interval = laterDate.timeIntervalSince(registered.dateTime)
+
+                let hours = interval.stringFromTimeIntervalToHour()
+//                print(hours)
+                if  hours < 12 {
+                    for row in self.form.rows {
+                        row.baseCell.isUserInteractionEnabled = false
+                        row.updateCell()
+                    }
+                } else {
+                    for row in self.form.rows {
+                        row.baseCell.isUserInteractionEnabled = userRegistered
+                        row.updateCell()
+                    }
+                }
+            }
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             ProgressHUD.sharedInstance.dismiss()
         }
@@ -223,10 +243,6 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         let realm = try! Realm()
         if let registered = realm.objects(Register.self).filter("curp == '\(curp!)'").first {
             self.lblNombre.text = "\(registered.nombre), puedes realizar el test para saber si necesitas atención médica"
-            
-            if let registered = realm.objects(Test.self).filter("curp == '\(curp!)'").first {
-                print(registered.dateTime)
-            }
         }
         
     }
@@ -272,17 +288,19 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             (pregunta17 as? String) == "Si" || (pregunta11 as? String) == "Si"
             ) {
             
-            ProgressHUD.sharedInstance.success(withMessage: "Presentas síntomas sopechosos, te recomendamos solicitar asistencia médica")
-            self.saveInformation(saveOnlyLocal: false)
+            ProgressHUD.sharedInstance.success(withMessage: "Presentas síntomas sopechosos, te recomendamos solicitar asistencia médica", withDuration: 12.0)
+            self.saveInformation(saveOnlyLocal: true)
+            self.checkForDoctor()
             
         } else {
             if (pregunta1 as? String) == "Si" ||
                 (pregunta2 as? String) == "Si" {
 
-                ProgressHUD.sharedInstance.success(withMessage: "Podrías tener la enfermedad COVID-19 causada por el coronavirus SARS-COV2, sin embargo, al momento no presentas síntomas de alarma, te recomendamos que no salgas de casa si no es necesario (aislamiento 14 días) y sigue las recomendaciones.", withDuration: 10.0)
+                ProgressHUD.sharedInstance.success(withMessage: "Podrías tener la enfermedad COVID-19 causada por el coronavirus SARS-COV2, sin embargo, al momento no presentas síntomas de alarma, te recomendamos que no salgas de casa si no es necesario (aislamiento 14 días) y sigue las recomendaciones.", withDuration: 12.0)
                 self.saveInformation(saveOnlyLocal: true)
+                self.checkForDoctor()
             } else {
-                ProgressHUD.sharedInstance.success(withMessage: "No te preocupes, no tienes síntomas de COVID-19 o coronavirus, pero sigue las recomendaciones para prevención", withDuration: 10.0)
+                ProgressHUD.sharedInstance.success(withMessage: "No te preocupes, no tienes síntomas de COVID-19 o coronavirus, pero sigue las recomendaciones para prevención", withDuration: 12.0)
             }
             
         }
@@ -303,6 +321,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         let formValues = self.form.values()
         let curp = UserDefaults.standard.string(forKey: "CURP")
         
+        dataTest.curp = curp!
         dataTest.presionSistolica = (formValues["presionSistolica"]! ?? "") as! String
         dataTest.presionDiastolica = (formValues["presionDiastolica"]! ?? "") as! String
         dataTest.frecuenciaCardiaca = (formValues["frecuenciaCardiaca"]! ?? "") as! String
@@ -345,7 +364,6 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         
         if saveOnlyLocal {
             self.saveOnLocal(dataTest: dataTest)
-            return
         }
         
         
@@ -390,7 +408,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             "pregunta16" : dataTest.pregunta16,
             "pregunta17" : dataTest.pregunta17,
             "pregunta18" : dataTest.pregunta18,
-            "call-id":"",
+            "call-id":"paciente1",
             
             "curp" : curp!,
         ]) { error in
@@ -434,6 +452,12 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     
     //MARK: - Delegados
     func registerSucces(curp: String) {
+        let alert = UIAlertController(title: "", message: "Inicio del test aparecer alerta: Este cuestionario es únicamente informativo y no representa un diagnóstico médico, si presentas algún deterioro en tu salud, solicita inmediatamente la atención médica necesaria.  Juntos trabajaremos para prevenir el COVD-19", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+        UserDefaults.standard.set(true, forKey: "alertShowed")
+        
         self.resetForms()
         self.enableDisableForm()
     }
@@ -464,5 +488,33 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             }
         }
     }
+}
+
+extension TimeInterval{
+
+    func stringFromTimeInterval() -> String {
+
+        let time = NSInteger(self)
+
+        let ms = Int((self.truncatingRemainder(dividingBy: 1)) * 1000)
+        let seconds = time % 60
+        let minutes = (time / 60) % 60
+        let hours = (time / 3600)
+
+        return String(format: "%0.2d:%0.2d:%0.2d.%0.3d",hours,minutes,seconds,ms)
+
+    }
     
+    func stringFromTimeIntervalToHour() -> Int {
+
+        let time = NSInteger(self)
+
+//        let ms = Int((self.truncatingRemainder(dividingBy: 1)) * 1000)
+//        let seconds = time % 60
+//        let minutes = (time / 60) % 60
+        let hours = (time / 3600)
+
+        return hours
+
+    }
 }

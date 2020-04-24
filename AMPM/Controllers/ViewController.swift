@@ -17,6 +17,10 @@ class ViewController: UIViewController, WKNavigationDelegate {
     let sampleURL = "https://www.google.com/maps/d/u/0/viewer?mid=1S0vCi3BA-7DOCS13MomK7KebkPsvYl8C&ll=20.94795435265575%2C-101.38373951049061&z=5"
     let locationManager = CLLocationManager()
     
+    override func viewWillDisappear(_ animated: Bool) {
+        ProgressHUD.sharedInstance.dismiss()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -49,7 +49,7 @@
 		947D46F53FC7B53D65270996 /* Pods_AMPM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AMPM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B018CDC224382A0A0000DA7E /* FormElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormElements.swift; sourceTree = "<group>"; };
 		B018CDC424382A690000DA7E /* StructFormElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructFormElements.swift; sourceTree = "<group>"; };
-		B0318DFC2428541E00A2174F /* AMPM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AMPM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0318DFC2428541E00A2174F /* Gema Video.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gema Video.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0318DFF2428541E00A2174F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0318E012428541E00A2174F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B0318E032428541E00A2174F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +66,7 @@
 		B04F2D04242FEFB200C01264 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B04F2D0724306BF200C01264 /* RulesValidations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesValidations.swift; sourceTree = "<group>"; };
 		B04F2D0A24307F9100C01264 /* Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
+		B05AB6842450E7A300157811 /* AMPM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AMPM.entitlements; sourceTree = "<group>"; };
 		B066EC36243C2FD900007E36 /* TestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModel.swift; sourceTree = "<group>"; };
 		B071DCBE2439715A00B1CE1F /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		B071DCC12439B2E400B1CE1F /* RegisterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterModel.swift; sourceTree = "<group>"; };
@@ -158,7 +159,7 @@
 		B0318DFD2428541E00A2174F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B0318DFC2428541E00A2174F /* AMPM.app */,
+				B0318DFC2428541E00A2174F /* Gema Video.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,6 +167,7 @@
 		B0318DFE2428541E00A2174F /* AMPM */ = {
 			isa = PBXGroup;
 			children = (
+				B05AB6842450E7A300157811 /* AMPM.entitlements */,
 				B066EC38243C4DF700007E36 /* assets */,
 				B071DCC02439B2CF00B1CE1F /* models */,
 				B018CDC12438297E0000DA7E /* form-elements */,
@@ -255,7 +257,7 @@
 			);
 			name = AMPM;
 			productName = AMPM;
-			productReference = B0318DFC2428541E00A2174F /* AMPM.app */;
+			productReference = B0318DFC2428541E00A2174F /* Gema Video.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -527,6 +529,7 @@
 			baseConfigurationReference = CA6C9BE1D435812B730F236D /* Pods-AMPM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AMPM/AMPM.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -538,12 +541,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3.1;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = mx.ampm.chr.AMPM;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Gema Video";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 arm64e armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -552,6 +557,7 @@
 			baseConfigurationReference = BC9C654EDCE7344EF68C20C8 /* Pods-AMPM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AMPM/AMPM.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -563,12 +569,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = mx.ampm.chr.AMPM;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Gema Video";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 arm64e armv7 armv7s x86_64";
 			};
 			name = Release;
 		};

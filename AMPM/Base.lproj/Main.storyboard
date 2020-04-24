@@ -266,7 +266,6 @@
                     </tabBar>
                     <connections>
                         <segue destination="yOA-4E-Udh" kind="relationship" relationship="viewControllers" id="wmP-U7-pzF"/>
-                        <segue destination="Jpt-lp-yF0" kind="relationship" relationship="viewControllers" id="Cxd-jT-vUD"/>
                         <segue destination="DWw-K8-twc" kind="relationship" relationship="viewControllers" id="dEH-ZJ-qB6"/>
                     </connections>
                 </tabBarController>
@@ -385,7 +384,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="veR-hl-42I">
-                                <rect key="frame" x="0.0" y="144" width="414" height="669"/>
+                                <rect key="frame" x="0.0" y="144" width="414" height="718"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Antes de responder el test, debes registrar tus datos" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUc-Cc-u5T">
