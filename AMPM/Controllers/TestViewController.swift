@@ -16,7 +16,9 @@ import Firebase
 import FirebaseCore
 import FirebaseFirestore
 
-class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
+import JitsiMeet
+
+class TestViewController: UIViewController, RegisterDelegate, UserListDelegate, JitsiMeetViewDelegate {
     
     //MARK: -
     @IBOutlet weak var viewContainer: UIView!
@@ -31,6 +33,21 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     var peso: String! = ""
     var callID: String! = ""
     
+    //propiedades para jitsi
+    fileprivate var pipViewCoordinator: PiPViewCoordinator?
+    fileprivate var jitsiMeetView: JitsiMeetView?
+    var idConferencia = "asdasd"
+    let conferenciaURL = "https://video.gema.clinic"
+    
+    
+    override func viewWillTransition(to size: CGSize,
+                                     with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        pipViewCoordinator?.resetBounds(bounds: rect)
+    }
+    
     override func viewDidLayoutSubviews() {
         self.eurekaForm.view.frame.size.width = self.viewContainer.frame.size.width
         self.eurekaForm.view.frame.size.height = self.viewContainer.frame.size.height
@@ -43,7 +60,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         
         let alertShowed = UserDefaults.standard.bool(forKey: "alertShowed")
         if alertShowed != true {
-            let alert = UIAlertController(title: "", message: "Inicio del test aparecer alerta: Este cuestionario es únicamente informativo y no representa un diagnóstico médico, si presentas algún deterioro en tu salud, solicita inmediatamente la atención médica necesaria.  Juntos trabajaremos para prevenir el COVD-19", preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(title: "", message: "Este cuestionario es únicamente informativo y no representa un diagnóstico médico, si presentas algún deterioro en tu salud, solicita inmediatamente atención médica necesaria.", preferredStyle: UIAlertController.Style.alert)
             let okAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil)
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: nil)
@@ -98,7 +115,10 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         
 
         //MARK: - SECCCION 3
-        form +++ Section("TEST PARA SÍNTOMAS COVID-19")
+        /*form +++ Section("TEST PARA SÍNTOMAS COVID-19") {
+            $0.hidden = true
+        }
+            
             
             //PREGUNTA 1
             <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "1.¿Estuve en contacto con personas con COVID-19?"))
@@ -132,8 +152,10 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "15. Aumento excesivo en la producción de moco y/o flemas", options: ["Si", "No"], value: "No", tag: "pregunta16"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "16. Fiebre difícil de controlar", options: ["Si", "No"], value: "No", tag: "pregunta17"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "17. Escalofrío", options: ["Si", "No"], value: "No", tag: "pregunta18"))
-            
-        
+            */
+        form +++ Section() {
+            $0.hidden = false
+        }
             <<< ButtonRow(){ row in
                 row.title = "Realizar test"
                 row.onCellSelection { (cell, row) in
@@ -250,7 +272,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     func testResult() {
         let formValues = self.form.values()
         
-        let pregunta1 = formValues["pregunta1"]! ?? "No"
+        /*let pregunta1 = formValues["pregunta1"]! ?? "No"
 //        let pregunta2 = formValues["pregunta2"]! ?? "No"
         let pregunta2 = formValues["pregunta3"]! ?? "No"
         let pregunta3 = formValues["pregunta4"]! ?? "No"
@@ -267,12 +289,17 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         let pregunta14 = formValues["pregunta15"]! ?? "No"
         let pregunta15 = formValues["pregunta16"]! ?? "No"
         let pregunta16 = formValues["pregunta17"]! ?? "No"
-        let pregunta17 = formValues["pregunta18"]! ?? "No"
+        let pregunta17 = formValues["pregunta18"]! ?? "No"*/
 //        let pregunta19 = formValues["pregunta9"]! ?? "No"
-    
         
         
-        if (
+        /****************************/
+        self.saveInformation(saveOnlyLocal: true)
+        self.checkForDoctor()
+        ProgressHUD.sharedInstance.success(withMessage: "Su información se almacenó, en breve su consulta estará disponible", withDuration: 8.0)
+        /****************************/
+        
+        /*if (
             ((pregunta3 as? String) == "Si" && (pregunta4 as? String) == "Si") ||
             ((pregunta3 as? String) == "Si" && (pregunta6 as? String) == "Si") ||
             ((pregunta4 as? String) == "Si" && (pregunta6 as? String) == "Si") ||
@@ -303,7 +330,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
                 ProgressHUD.sharedInstance.success(withMessage: "No te preocupes, no tienes síntomas de COVID-19 o coronavirus, pero sigue las recomendaciones para prevención", withDuration: 12.0)
             }
             
-        }
+        }*/
     }
     
     //MARK: - FUNCIONES
@@ -342,7 +369,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         dataTest.inmunosupresion = (formValues["inmunosupresion"]! ?? "") as! String
         dataTest.lactancia = (formValues["lactancia"]! ?? "") as! String
         
-        dataTest.pregunta1 = (formValues["pregunta1"]! ?? "") as! String
+        /*dataTest.pregunta1 = (formValues["pregunta1"]! ?? "") as! String
 //        dataTest.pregunta2 = (formValues["pregunta2"]! ?? "") as! String
         dataTest.pregunta3 = (formValues["pregunta3"]! ?? "") as! String
         dataTest.pregunta4 = (formValues["pregunta4"]! ?? "") as! String
@@ -360,7 +387,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         dataTest.pregunta15 = (formValues["pregunta15"]! ?? "") as! String
         dataTest.pregunta16 = (formValues["pregunta16"]! ?? "") as! String
         dataTest.pregunta17 = (formValues["pregunta17"]! ?? "") as! String
-        dataTest.pregunta18 = (formValues["pregunta18"]! ?? "") as! String
+        dataTest.pregunta18 = (formValues["pregunta18"]! ?? "") as! String*/
         
         if saveOnlyLocal {
             self.saveOnLocal(dataTest: dataTest)
@@ -390,25 +417,25 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             "inmunosupresion" : dataTest.inmunosupresion,
             "lactancia" : dataTest.lactancia,
             
-            "pregunta1" : dataTest.pregunta1,
-            "pregunta3" : dataTest.pregunta3,
-            "pregunta4" : dataTest.pregunta4,
-            "pregunta5" : dataTest.pregunta5,
-            "pregunta6" : dataTest.pregunta6,
-            "pregunta7" : dataTest.pregunta7,
-            "pregunta8" : dataTest.pregunta8,
-            "pregunta9" : dataTest.pregunta9,
-            
-            "pregunta10" : dataTest.pregunta10,
-            "pregunta11" : dataTest.pregunta11,
-            "pregunta12" : dataTest.pregunta12,
-            "pregunta13" : dataTest.pregunta13,
-            "pregunta14" : dataTest.pregunta14,
-            "pregunta15" : dataTest.pregunta15,
-            "pregunta16" : dataTest.pregunta16,
-            "pregunta17" : dataTest.pregunta17,
-            "pregunta18" : dataTest.pregunta18,
-            "call-id":"paciente1",
+//            "pregunta1" : dataTest.pregunta1,
+//            "pregunta3" : dataTest.pregunta3,
+//            "pregunta4" : dataTest.pregunta4,
+//            "pregunta5" : dataTest.pregunta5,
+//            "pregunta6" : dataTest.pregunta6,
+//            "pregunta7" : dataTest.pregunta7,
+//            "pregunta8" : dataTest.pregunta8,
+//            "pregunta9" : dataTest.pregunta9,
+//
+//            "pregunta10" : dataTest.pregunta10,
+//            "pregunta11" : dataTest.pregunta11,
+//            "pregunta12" : dataTest.pregunta12,
+//            "pregunta13" : dataTest.pregunta13,
+//            "pregunta14" : dataTest.pregunta14,
+//            "pregunta15" : dataTest.pregunta15,
+//            "pregunta16" : dataTest.pregunta16,
+//            "pregunta17" : dataTest.pregunta17,
+//            "pregunta18" : dataTest.pregunta18,
+            "call-id" : curp!,
             
             "curp" : curp!,
         ]) { error in
@@ -432,11 +459,20 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     @IBAction func actionOpenCall(_ sender: Any) {
 //        guard let url = URL(string: "https://video.e-clinic24.mx/\(self.callID ?? "")") else { return }
 //        UIApplication.shared.open(url)
-        let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
-        vc.idConferencia = self.callID
-//        self.navigationController?.pushViewController(vc, animated: true)
-        self.present(vc, animated: true, completion: nil)
+        
+        let alert = UIAlertController(title: "¡Atención!", message: "Se ha enviado la solicitud a un médico que será responsable de su consulta, por favor espere un momento mientras el médico se conecta", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "Aceptar", style: UIAlertAction.Style.default, handler: {(alert: UIAlertAction) in
+            
+//            let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+//            let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
+//            vc.idConferencia = self.callID
+//            self.present(vc, animated: true, completion: nil)
+            self.openJitsiMeet()
+            self.navigationController?.navigationBar.isHidden = true
+        })
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+        
         
         
     }
@@ -452,7 +488,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     
     //MARK: - Delegados
     func registerSucces(curp: String) {
-        let alert = UIAlertController(title: "", message: "Inicio del test aparecer alerta: Este cuestionario es únicamente informativo y no representa un diagnóstico médico, si presentas algún deterioro en tu salud, solicita inmediatamente la atención médica necesaria.  Juntos trabajaremos para prevenir el COVD-19", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "", message: "Este cuestionario es únicamente informativo y no representa un diagnóstico médico, si presentas algún deterioro en tu salud, solicita inmediatamente atención médica necesaria.", preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil)
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
@@ -486,6 +522,58 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
                 row.baseValue = "No"
                 row.updateCell()
             }
+        }
+    }
+    
+    
+    //MARK: JITSI FUNCTIONS
+    
+    func openJitsiMeet() {
+        cleanUp()
+
+        // create and configure jitsimeet view
+        let jitsiMeetView = JitsiMeetView()
+        jitsiMeetView.delegate = self
+        self.jitsiMeetView = jitsiMeetView
+        let options = JitsiMeetConferenceOptions.fromBuilder { (builder) in
+            builder.welcomePageEnabled = false
+            builder.serverURL = URL(string: self.conferenciaURL)
+            builder.room = self.idConferencia
+        }
+        jitsiMeetView.join(options)
+
+        // Enable jitsimeet view to be a view that can be displayed
+        // on top of all the things, and let the coordinator to manage
+        // the view state and interactions
+        pipViewCoordinator = PiPViewCoordinator(withView: jitsiMeetView)
+        pipViewCoordinator?.configureAsStickyView(withParentView: view)
+
+        // animate in
+        jitsiMeetView.alpha = 0
+        pipViewCoordinator?.show()
+        
+    }
+
+    fileprivate func cleanUp() {
+        jitsiMeetView?.removeFromSuperview()
+        jitsiMeetView = nil
+        pipViewCoordinator = nil
+    }
+    
+    
+    func conferenceTerminated(_ data: [AnyHashable : Any]!) {
+        DispatchQueue.main.async {
+            self.pipViewCoordinator?.hide() { _ in
+                self.cleanUp()
+//                self.dismiss(animated: true, completion: nil)
+                self.navigationController?.navigationBar.isHidden = false
+            }
+        }
+    }
+
+    func enterPicture(inPicture data: [AnyHashable : Any]!) {
+        DispatchQueue.main.async {
+            self.pipViewCoordinator?.enterPictureInPicture()
         }
     }
 }

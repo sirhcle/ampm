@@ -16,8 +16,8 @@ class VideoConsultaViewController: UIViewController, JitsiMeetViewDelegate {
     fileprivate var pipViewCoordinator: PiPViewCoordinator?
     fileprivate var jitsiMeetView: JitsiMeetView?
     
-    var idConferencia = ""
-    let conferenciaURL = "https://www.gema.clinic"
+    var idConferencia = "asdasd"
+    let conferenciaURL = "https://video.gema.clinic"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +56,7 @@ class VideoConsultaViewController: UIViewController, JitsiMeetViewDelegate {
         // animate in
         jitsiMeetView.alpha = 0
         pipViewCoordinator?.show()
+        
     }
 
     fileprivate func cleanUp() {
