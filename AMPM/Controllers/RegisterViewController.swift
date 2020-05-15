@@ -15,7 +15,6 @@ import FirebaseFirestore
 import CFAlertViewController
 import Loaf
 import RealmSwift
-import CoreLocation
 
 protocol RegisterDelegate {
     func registerSucces(curp: String)
@@ -28,7 +27,7 @@ class RegisterViewController: UIViewController {
     var eurekaForm: FormViewController! = FormViewController()
     var delegate: RegisterDelegate!
     var form:Eureka.Form!
-    let locationManager = CLLocationManager()
+    
     let colorEditing = UIColor.init(red: 174.0/255.0, green: 204.0/255.0, blue: 201.0/255.0, alpha: 1.0)
     
     override func viewDidLayoutSubviews() {
@@ -38,15 +37,6 @@ class RegisterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /** obtener localización **/
-        self.locationManager.requestAlwaysAuthorization()
-        self.locationManager.requestWhenInUseAuthorization()
-
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startUpdatingLocation()
-        }
         
         form = self.eurekaForm.form
         
@@ -417,10 +407,7 @@ class RegisterViewController: UIViewController {
                 "condado": dataRegister.condado,
                 "ciudad": dataRegister.ciudad,
                 "calle": dataRegister.calle,
-                "telefono": dataRegister.telefono,
-                "latitud":(self.locationManager.location?.coordinate.latitude ?? "")!,
-                "longitud":(self.locationManager.location?.coordinate.longitude ?? "")!
-                
+                "telefono": dataRegister.telefono
             ]) { error in
                 if let err = error {
                     ProgressHUD.sharedInstance.showError(withMessage: "Error al registrarse \(err)")
@@ -456,13 +443,6 @@ class RegisterViewController: UIViewController {
     
     @IBAction func closeView(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
-    }
-}
-
-extension RegisterViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
 }
 
