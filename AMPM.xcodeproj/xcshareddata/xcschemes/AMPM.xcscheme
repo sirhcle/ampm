@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B0318DFB2428541E00A2174F"
-               BuildableName = "AMPM.app"
+               BuildableName = "AMPM Gema.app"
                BlueprintName = "AMPM"
                ReferencedContainer = "container:AMPM.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B0318DFB2428541E00A2174F"
-            BuildableName = "AMPM.app"
+            BuildableName = "AMPM Gema.app"
             BlueprintName = "AMPM"
             ReferencedContainer = "container:AMPM.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B0318DFB2428541E00A2174F"
-            BuildableName = "AMPM.app"
+            BuildableName = "AMPM Gema.app"
             BlueprintName = "AMPM"
             ReferencedContainer = "container:AMPM.xcodeproj">
          </BuildableReference>

@@ -16,7 +16,9 @@ import Firebase
 import FirebaseCore
 import FirebaseFirestore
 
-class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
+import JitsiMeet
+
+class TestViewController: UIViewController, RegisterDelegate, UserListDelegate, JitsiMeetViewDelegate {
     
     //MARK: -
     @IBOutlet weak var viewContainer: UIView!
@@ -24,13 +26,27 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     @IBOutlet weak var lblNombre: UILabel!
     @IBOutlet weak var btnCallDoctor: UIBarButtonItem!
     
-    
     var isRegistered: Bool! = false
     var eurekaForm: FormViewController! = FormViewController()
     var form:Eureka.Form!
     var estatura: String! = ""
     var peso: String! = ""
     var callID: String! = ""
+    
+    //propiedades para jitsi
+    fileprivate var pipViewCoordinator: PiPViewCoordinator?
+    fileprivate var jitsiMeetView: JitsiMeetView?
+    var idConferencia = ""
+    let conferenciaURL = "https://video.gema.clinic"
+    
+    
+    override func viewWillTransition(to size: CGSize,
+                                     with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        pipViewCoordinator?.resetBounds(bounds: rect)
+    }
     
     override func viewDidLayoutSubviews() {
         self.eurekaForm.view.frame.size.width = self.viewContainer.frame.size.width
@@ -41,21 +57,31 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         ProgressHUD.sharedInstance.show(withText: "Verificando usuarios registrados")
         self.enableDisableForm()
         self.checkForDoctor()
+        
+        let alertShowed = UserDefaults.standard.bool(forKey: "alertShowed")
+        if alertShowed != true {
+            let alert = UIAlertController(title: "", message: "Para iniciar una teleconsulta presiona el botón médico, si quieres previamente puedes realizar el test médico", preferredStyle: UIAlertController.Style.alert)
+            let okAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+            UserDefaults.standard.set(true, forKey: "alertShowed")
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.btnCallDoctor.isEnabled = false
         self.isRegistered = UserDefaults.standard.bool(forKey: "isRegistered")
+        
         self.form = self.eurekaForm.form
         
         //MARK: - SECCION 1
         form +++ Section("Signos vitales y somatometria")
         
-            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "presionSistolica", title: "Presión sistólica"))
-            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "presionDiastolica", title: "Presión diastólica"))
-            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "frecuenciaCardiaca", title: "Frecuencia cardiaca"))
-            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "temperatura", title: "Temperatura"))
+            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "presionSistolica", title: "Presión sistólica (mmHg)"))
+            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "presionDiastolica", title: "Presión diastólica (mmHg)"))
+            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "frecuenciaCardiaca", title: "Frecuencia cardiaca (PPM)"))
+            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "temperatura", title: "Temperatura ºC"))
             <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "estatura", title: "Estatura(m)"))
                 .onChange({ (row) in
                     self.estatura = row.baseValue as? String
@@ -67,7 +93,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
                     self.peso = row.baseValue as? String
                     self.calculaasaCorporal()
             })
-            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "masaCorporal", title: "Índice de masa corporal"))
+            <<< FormElements.TextRowElement(parameters: TextRowConfiguration(tag: "masaCorporal", title: "Índice de Masa Corporal (IMC)"))
                 
         
         //MARK: - SECCION 2
@@ -89,37 +115,55 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         
 
         //MARK: - SECCCION 3
-        form +++ Section("Test para síntomas COVID19")
+        /*form +++ Section("TEST PARA SÍNTOMAS COVID-19") {
+            $0.hidden = true
+        }
+            
             
             //PREGUNTA 1
-            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "1.¿Estuve en contacto con personas con COVID19?"))
+            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "1.¿Estuve en contacto con personas con COVID-19?"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "", options: ["Si", "No"], value: "No", tag: "pregunta1"))
             
         
             //PREGUNTA 2
-            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "2.¿Regresé de un país/estado con transmisión comunitaria?"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "", options: ["Si", "No"], value: "No", tag: "pregunta2"))
+//            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "2.¿Regresé de un país/estado con transmisión comunitaria?"))
+//            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "", options: ["Si", "No"], value: "No", tag: "pregunta2"))
             
             //PREGUNTA 3
-            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "3.¿Estuve en contacto con personas que regresaron de un país/estado con transmisión comunitaria?"))
+            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "2.¿Estuve en contacto con personas que regresaron de un país/estado con transmisión comunitaria?"))
             <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "", options: ["Si", "No"], value: "No", tag: "pregunta3"))
         
             //PREGUNTA 4
-            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "¿Presento los siguientes síntomas:?"))
+            <<< FormElements.LabelRowElement(parameters: LabelRowConfiguration(title: "¿Presento los siguientes síntomas?"))
             
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "4. Fiebre", options: ["Si", "No"], value: "No", tag: "pregunta4"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "5. Tos", options: ["Si", "No"], value: "No", tag: "pregunta5"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "6. Dificultad para respirar", options: ["Si", "No"], value: "No", tag: "pregunta6"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "7. Dolor de cabeza", options: ["Si", "No"], value: "No", tag: "pregunta7"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "8. Dolor de articulaciones", options: ["Si", "No"], value: "No", tag: "pregunta8"))
-            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "9. Dolor de garganta", options: ["Si", "No"], value: "No", tag: "pregunta9"))
-        
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "3. Fiebre", options: ["Si", "No"], value: "No", tag: "pregunta4"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "4. Tos", options: ["Si", "No"], value: "No", tag: "pregunta5"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "5. Dificultad para respirar", options: ["Si", "No"], value: "No", tag: "pregunta6"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "6. Dolor de cabeza", options: ["Si", "No"], value: "No", tag: "pregunta7"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "7. Dolor de articulaciones", options: ["Si", "No"], value: "No", tag: "pregunta8"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "8. Dolor de garganta", options: ["Si", "No"], value: "No", tag: "pregunta9"))
+            
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "9. Diarrea", options: ["Si", "No"], value: "No", tag: "pregunta10"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "10. Dolor muscular", options: ["Si", "No"], value: "No", tag: "pregunta11"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "11. Debilidad y malestar en general", options: ["Si", "No"], value: "No", tag: "pregunta12"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "12. Secreción nasal", options: ["Si", "No"], value: "No", tag: "pregunta13"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "13. Conjuntivitis", options: ["Si", "No"], value: "No", tag: "pregunta14"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "14. Dolor en el pecho, sensación de falta de aire", options: ["Si", "No"], value: "No", tag: "pregunta15"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "15. Aumento excesivo en la producción de moco y/o flemas", options: ["Si", "No"], value: "No", tag: "pregunta16"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "16. Fiebre difícil de controlar", options: ["Si", "No"], value: "No", tag: "pregunta17"))
+            <<< FormElements.SegmentedRowElement(parameters: SegmentedRowConfiguration(title: "17. Escalofrío", options: ["Si", "No"], value: "No", tag: "pregunta18"))
+            */
+        form +++ Section() {
+            $0.hidden = false
+        }
             <<< ButtonRow(){ row in
                 row.title = "Realizar test"
                 row.onCellSelection { (cell, row) in
 //                    print("evaluar")
                     ProgressHUD.sharedInstance.show(withText: "Evaluando")
                     self.testResult()
+                }.cellSetup { (cell, row) in
+                    cell.tintColor = UIColor.systemBlue
                 }
             }
         
@@ -149,13 +193,14 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
                   self.btnCallDoctor.isEnabled = true
               } else {
                   self.btnCallDoctor.isEnabled = false
+                if curp != nil && curp != "" {
+                    self.callID = curp
+                    self.btnCallDoctor.isEnabled = true
+                }
               }
               
             }
         }
-        
-        
-        
     }
     
     func calculaasaCorporal() {
@@ -163,8 +208,13 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         if (self.estatura != nil && self.estatura != "") && (self.peso != nil && self.peso != "") {
             let pesoNum = Float(self.peso)
             let estaturaNum = Float(self.estatura)
-            let masaCorporalNum = pesoNum! / estaturaNum!
-            masaCorporal?.baseValue = "\(masaCorporalNum)"
+            let estaturaCuadrada = estaturaNum! * estaturaNum!
+            let masaCorporalNum = pesoNum! / estaturaCuadrada
+            
+            let roundedVal = String(format: "%.1f", masaCorporalNum)
+            
+//            masaCorporal?.baseValue = "\(masaCorporalNum)"
+            masaCorporal?.baseValue = roundedVal
             masaCorporal?.updateCell()
         }
         
@@ -182,6 +232,29 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         
         for row in self.form.rows {
             row.baseCell.isUserInteractionEnabled = userRegistered
+        }
+        
+        if userRegistered {
+            let realm = try! Realm()
+            if let registered = realm.objects(Test.self).filter("curp == '\(curp!)'").first {
+                
+                let laterDate = Date()
+                let interval = laterDate.timeIntervalSince(registered.dateTime)
+
+                let hours = interval.stringFromTimeIntervalToHour()
+//                print(hours)
+                if  hours < 12 {
+                    for row in self.form.rows {
+                        row.baseCell.isUserInteractionEnabled = false
+                        row.updateCell()
+                    }
+                } else {
+                    for row in self.form.rows {
+                        row.baseCell.isUserInteractionEnabled = userRegistered
+                        row.updateCell()
+                    }
+                }
+            }
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -203,42 +276,83 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     func testResult() {
         let formValues = self.form.values()
         
-        let pregunta1 = formValues["pregunta1"]! ?? "No"
-        let pregunta2 = formValues["pregunta2"]! ?? "No"
-        let pregunta3 = formValues["pregunta3"]! ?? "No"
-        let pregunta4 = formValues["pregunta4"]! ?? "No"
-        let pregunta5 = formValues["pregunta5"]! ?? "No"
-        let pregunta6 = formValues["pregunta6"]! ?? "No"
-        let pregunta7 = formValues["pregunta7"]! ?? "No"
-        let pregunta8 = formValues["pregunta8"]! ?? "No"
-        let pregunta9 = formValues["pregunta9"]! ?? "No"
+        /*let pregunta1 = formValues["pregunta1"]! ?? "No"
+//        let pregunta2 = formValues["pregunta2"]! ?? "No"
+        let pregunta2 = formValues["pregunta3"]! ?? "No"
+        let pregunta3 = formValues["pregunta4"]! ?? "No"
+        let pregunta4 = formValues["pregunta5"]! ?? "No"
+        let pregunta5 = formValues["pregunta6"]! ?? "No"
+        let pregunta6 = formValues["pregunta7"]! ?? "No"
+        let pregunta7 = formValues["pregunta8"]! ?? "No"
+        let pregunta8 = formValues["pregunta9"]! ?? "No"
+        let pregunta9 = formValues["pregunta10"]! ?? "No"
+        let pregunta10 = formValues["pregunta11"]! ?? "No"
+        let pregunta11 = formValues["pregunta12"]! ?? "No"
+        let pregunta12 = formValues["pregunta13"]! ?? "No"
+        let pregunta13 = formValues["pregunta14"]! ?? "No"
+        let pregunta14 = formValues["pregunta15"]! ?? "No"
+        let pregunta15 = formValues["pregunta16"]! ?? "No"
+        let pregunta16 = formValues["pregunta17"]! ?? "No"
+        let pregunta17 = formValues["pregunta18"]! ?? "No"*/
+//        let pregunta19 = formValues["pregunta9"]! ?? "No"
         
-        if ((pregunta4 as? String) == "Si" || (pregunta5 as? String) == "Si") &&
-            ((pregunta6 as? String) == "Si" || (pregunta7 as? String) == "Si" ||
-            (pregunta8 as? String) == "Si" || (pregunta9 as? String) == "Si"){
+        
+        /****************************/
+        self.saveInformation(saveOnlyLocal: true)
+        self.checkForDoctor()
+        ProgressHUD.sharedInstance.success(withMessage: "Su información se almacenó, en breve su consulta estará disponible", withDuration: 8.0)
+        /****************************/
+        
+        /*if (
+            ((pregunta3 as? String) == "Si" && (pregunta4 as? String) == "Si") ||
+            ((pregunta3 as? String) == "Si" && (pregunta6 as? String) == "Si") ||
+            ((pregunta4 as? String) == "Si" && (pregunta6 as? String) == "Si") ||
+            ((pregunta3 as? String) == "Si" && (pregunta4 as? String) == "Si" && (pregunta6 as? String) == "Si")
+            )
+            &&
+            (
+            (pregunta5 as? String) == "Si" || (pregunta7 as? String) == "Si" ||
+            (pregunta8 as? String) == "Si" || (pregunta9 as? String) == "Si" ||
+            (pregunta10 as? String) == "Si" || (pregunta12 as? String) == "Si" ||
+            (pregunta13 as? String) == "Si" || (pregunta14 as? String) == "Si" ||
+            (pregunta15 as? String) == "Si" || (pregunta16 as? String) == "Si" ||
+            (pregunta17 as? String) == "Si" || (pregunta11 as? String) == "Si"
+            ) {
             
-            ProgressHUD.sharedInstance.success(withMessage: "Presenta síntomas, es necesario acudir al médico")
-            self.saveInformation()
+            ProgressHUD.sharedInstance.success(withMessage: "Presentas síntomas sopechosos, te recomendamos solicitar asistencia médica", withDuration: 12.0)
+            self.saveInformation(saveOnlyLocal: true)
+            self.checkForDoctor()
             
         } else {
             if (pregunta1 as? String) == "Si" ||
-                (pregunta2 as? String) == "Si" ||
-                (pregunta3 as? String) == "Si" {
-//                ProgressHUD.sharedInstance.success(withMessage: "Recomendamos consulta")
-                ProgressHUD.sharedInstance.showError(withMessage: "No presenta síntomas de preocupación, sugerimos tomar el test nuevamente en 14 días")
+                (pregunta2 as? String) == "Si" {
+
+                ProgressHUD.sharedInstance.success(withMessage: "Podrías tener la enfermedad COVID-19 causada por el coronavirus SARS-COV2, sin embargo, al momento no presentas síntomas de alarma, te recomendamos que no salgas de casa si no es necesario (aislamiento 14 días) y sigue las recomendaciones.", withDuration: 12.0)
+                self.saveInformation(saveOnlyLocal: true)
+                self.checkForDoctor()
             } else {
-                ProgressHUD.sharedInstance.success(withMessage: "Usted no presenta síntomas, no es necesario acudir al médico")
+                ProgressHUD.sharedInstance.success(withMessage: "No te preocupes, no tienes síntomas de COVID-19 o coronavirus, pero sigue las recomendaciones para prevención", withDuration: 12.0)
             }
             
-        }
+        }*/
     }
     
     //MARK: - FUNCIONES
-    func saveInformation() {
+    
+    func saveOnLocal(dataTest: Test)
+    {
+        let realm = try! Realm()
+        realm.beginWrite()
+        realm.add(dataTest, update: Realm.UpdatePolicy.modified)
+        try! realm.commitWrite()
+    }
+    
+    func saveInformation(saveOnlyLocal: Bool) {
         let dataTest = Test()
         let formValues = self.form.values()
         let curp = UserDefaults.standard.string(forKey: "CURP")
         
+        dataTest.curp = curp!
         dataTest.presionSistolica = (formValues["presionSistolica"]! ?? "") as! String
         dataTest.presionDiastolica = (formValues["presionDiastolica"]! ?? "") as! String
         dataTest.frecuenciaCardiaca = (formValues["frecuenciaCardiaca"]! ?? "") as! String
@@ -259,8 +373,8 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         dataTest.inmunosupresion = (formValues["inmunosupresion"]! ?? "") as! String
         dataTest.lactancia = (formValues["lactancia"]! ?? "") as! String
         
-        dataTest.pregunta1 = (formValues["pregunta1"]! ?? "") as! String
-        dataTest.pregunta2 = (formValues["pregunta2"]! ?? "") as! String
+        /*dataTest.pregunta1 = (formValues["pregunta1"]! ?? "") as! String
+//        dataTest.pregunta2 = (formValues["pregunta2"]! ?? "") as! String
         dataTest.pregunta3 = (formValues["pregunta3"]! ?? "") as! String
         dataTest.pregunta4 = (formValues["pregunta4"]! ?? "") as! String
         dataTest.pregunta5 = (formValues["pregunta5"]! ?? "") as! String
@@ -268,6 +382,20 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         dataTest.pregunta7 = (formValues["pregunta7"]! ?? "") as! String
         dataTest.pregunta8 = (formValues["pregunta8"]! ?? "") as! String
         dataTest.pregunta9 = (formValues["pregunta9"]! ?? "") as! String
+        
+        dataTest.pregunta10 = (formValues["pregunta10"]! ?? "") as! String
+        dataTest.pregunta11 = (formValues["pregunta11"]! ?? "") as! String
+        dataTest.pregunta12 = (formValues["pregunta12"]! ?? "") as! String
+        dataTest.pregunta13 = (formValues["pregunta13"]! ?? "") as! String
+        dataTest.pregunta14 = (formValues["pregunta14"]! ?? "") as! String
+        dataTest.pregunta15 = (formValues["pregunta15"]! ?? "") as! String
+        dataTest.pregunta16 = (formValues["pregunta16"]! ?? "") as! String
+        dataTest.pregunta17 = (formValues["pregunta17"]! ?? "") as! String
+        dataTest.pregunta18 = (formValues["pregunta18"]! ?? "") as! String*/
+        
+        if saveOnlyLocal {
+            self.saveOnLocal(dataTest: dataTest)
+        }
         
         
         let db = Firestore.firestore()
@@ -293,15 +421,25 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
             "inmunosupresion" : dataTest.inmunosupresion,
             "lactancia" : dataTest.lactancia,
             
-            "pregunta1" : dataTest.pregunta1,
-            "pregunta2" : dataTest.pregunta2,
-            "pregunta3" : dataTest.pregunta3,
-            "pregunta4" : dataTest.pregunta4,
-            "pregunta5" : dataTest.pregunta5,
-            "pregunta6" : dataTest.pregunta6,
-            "pregunta7" : dataTest.pregunta7,
-            "pregunta8" : dataTest.pregunta8,
-            "pregunta9" : dataTest.pregunta9,
+//            "pregunta1" : dataTest.pregunta1,
+//            "pregunta3" : dataTest.pregunta3,
+//            "pregunta4" : dataTest.pregunta4,
+//            "pregunta5" : dataTest.pregunta5,
+//            "pregunta6" : dataTest.pregunta6,
+//            "pregunta7" : dataTest.pregunta7,
+//            "pregunta8" : dataTest.pregunta8,
+//            "pregunta9" : dataTest.pregunta9,
+//
+//            "pregunta10" : dataTest.pregunta10,
+//            "pregunta11" : dataTest.pregunta11,
+//            "pregunta12" : dataTest.pregunta12,
+//            "pregunta13" : dataTest.pregunta13,
+//            "pregunta14" : dataTest.pregunta14,
+//            "pregunta15" : dataTest.pregunta15,
+//            "pregunta16" : dataTest.pregunta16,
+//            "pregunta17" : dataTest.pregunta17,
+//            "pregunta18" : dataTest.pregunta18,
+            "call-id" : curp!,
             
             "curp" : curp!,
         ]) { error in
@@ -311,6 +449,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
         }
         
     }
+    
     
     //MARK: - ACTIONS
     @IBAction func actionRegister(_ sender: Any) {
@@ -324,10 +463,23 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     @IBAction func actionOpenCall(_ sender: Any) {
 //        guard let url = URL(string: "https://video.e-clinic24.mx/\(self.callID ?? "")") else { return }
 //        UIApplication.shared.open(url)
-        let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
-        vc.idConferencia = self.callID
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        let alert = UIAlertController(title: "¡Atención!", message: "En breve un médico se pondrá en contacto contigo, si no has llenado tus datos médicos te invitamos a que llenes esta información.", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "Aceptar", style: UIAlertAction.Style.default, handler: {(alert: UIAlertAction) in
+            
+//            let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+//            let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
+//            vc.idConferencia = self.callID
+//            self.present(vc, animated: true, completion: nil)
+            self.idConferencia = self.callID
+            self.openJitsiMeet()
+            self.navigationController?.navigationBar.isHidden = true
+        })
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+        
+        
+        
     }
     
     @IBAction func actionShowList(_ sender: Any) {
@@ -341,7 +493,16 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     
     //MARK: - Delegados
     func registerSucces(curp: String) {
+        let alert = UIAlertController(title: "", message: "Para iniciar una teleconsulta presiona el botón médico, si quieres previamente puedes realizar el test médico.", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+        UserDefaults.standard.set(true, forKey: "alertShowed")
+        
+        self.callID = curp
+        self.resetForms()
         self.enableDisableForm()
+        self.btnCallDoctor.isEnabled = true
     }
     
     func userListRegisterNew() {
@@ -352,9 +513,103 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate {
     }
     
     func userListUserSelected(dataUser: Register) {
+        self.resetForms()
         UserDefaults.standard.set(dataUser.curp, forKey: "CURP")
         self.enableDisableForm()
     }
     
+    func resetForms()
+    {
+        for row in self.form.allRows {
+            if row is TextRow {
+                row.baseValue = ""
+                row.updateCell()
+            }
+            if row is SegmentedRow<String> {
+                row.baseValue = "No"
+                row.updateCell()
+            }
+        }
+    }
     
+    
+    //MARK: JITSI FUNCTIONS
+    
+    func openJitsiMeet() {
+        cleanUp()
+
+        // create and configure jitsimeet view
+        let jitsiMeetView = JitsiMeetView()
+        jitsiMeetView.delegate = self
+        self.jitsiMeetView = jitsiMeetView
+        let options = JitsiMeetConferenceOptions.fromBuilder { (builder) in
+            builder.welcomePageEnabled = false
+            builder.serverURL = URL(string: self.conferenciaURL)
+            builder.room = self.idConferencia
+        }
+        jitsiMeetView.join(options)
+
+        // Enable jitsimeet view to be a view that can be displayed
+        // on top of all the things, and let the coordinator to manage
+        // the view state and interactions
+        pipViewCoordinator = PiPViewCoordinator(withView: jitsiMeetView)
+        pipViewCoordinator?.configureAsStickyView(withParentView: view)
+
+        // animate in
+        jitsiMeetView.alpha = 0
+        pipViewCoordinator?.show()
+        
+    }
+
+    fileprivate func cleanUp() {
+        jitsiMeetView?.removeFromSuperview()
+        jitsiMeetView = nil
+        pipViewCoordinator = nil
+    }
+    
+    
+    func conferenceTerminated(_ data: [AnyHashable : Any]!) {
+        DispatchQueue.main.async {
+            self.pipViewCoordinator?.hide() { _ in
+                self.cleanUp()
+//                self.dismiss(animated: true, completion: nil)
+                self.navigationController?.navigationBar.isHidden = false
+            }
+        }
+    }
+
+    func enterPicture(inPicture data: [AnyHashable : Any]!) {
+        DispatchQueue.main.async {
+            self.pipViewCoordinator?.enterPictureInPicture()
+        }
+    }
+}
+
+extension TimeInterval{
+
+    func stringFromTimeInterval() -> String {
+
+        let time = NSInteger(self)
+
+        let ms = Int((self.truncatingRemainder(dividingBy: 1)) * 1000)
+        let seconds = time % 60
+        let minutes = (time / 60) % 60
+        let hours = (time / 3600)
+
+        return String(format: "%0.2d:%0.2d:%0.2d.%0.3d",hours,minutes,seconds,ms)
+
+    }
+    
+    func stringFromTimeIntervalToHour() -> Int {
+
+        let time = NSInteger(self)
+
+//        let ms = Int((self.truncatingRemainder(dividingBy: 1)) * 1000)
+//        let seconds = time % 60
+//        let minutes = (time / 60) % 60
+        let hours = (time / 3600)
+
+        return hours
+
+    }
 }

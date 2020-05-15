@@ -10,6 +10,8 @@ import Foundation
 import RealmSwift
 
 class Test: Object {
+    
+    @objc dynamic var dateTime:Date = Date()
     @objc dynamic var presionSistolica = ""
     @objc dynamic var presionDiastolica = ""
     @objc dynamic var frecuenciaCardiaca = ""
@@ -31,7 +33,7 @@ class Test: Object {
     @objc dynamic var lactancia = ""
     
     @objc dynamic var pregunta1 = ""
-    @objc dynamic var pregunta2 = ""
+//    @objc dynamic var pregunta2 = ""
     @objc dynamic var pregunta3 = ""
     @objc dynamic var pregunta4 = ""
     @objc dynamic var pregunta5 = ""
@@ -40,6 +42,20 @@ class Test: Object {
     @objc dynamic var pregunta8 = ""
     @objc dynamic var pregunta9 = ""
     
+    @objc dynamic var pregunta10 = ""
+    @objc dynamic var pregunta11 = ""
+    @objc dynamic var pregunta12 = ""
+    @objc dynamic var pregunta13 = ""
+    @objc dynamic var pregunta14 = ""
+    @objc dynamic var pregunta15 = ""
+    @objc dynamic var pregunta16 = ""
+    @objc dynamic var pregunta17 = ""
+    @objc dynamic var pregunta18 = ""
+    
     @objc dynamic var curp = ""
+    
+    override class func primaryKey() -> String? {
+        return "curp"
+    }
 
 }

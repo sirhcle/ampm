@@ -9,6 +9,7 @@ target 'AMPM' do
   pod 'RAMAnimatedTabBarController'
   pod 'Eureka'
   pod 'Firebase/Analytics'
+  pod 'Firebase/DynamicLinks'
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
@@ -16,4 +17,13 @@ target 'AMPM' do
   pod 'CFAlertViewController'
   pod "KRProgressHUD"
   pod "RealmSwift"
+  pod 'JitsiMeetSDK'
+  
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+      end
+    end
+  end
 end

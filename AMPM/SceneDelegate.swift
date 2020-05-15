@@ -48,6 +48,57 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        print(userActivity)
+        self.redirectUniversalLink(userActivity: userActivity)
+    }
+    
+    func redirectUniversalLink(userActivity: NSUserActivity){
+            if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
+                
+                guard  let urlPage = userActivity.webpageURL else { return }
+                print(urlPage)
+                
+                let urlString = urlPage.absoluteString
+                
+                if let range = urlString.range(of: "https://www.gema.clinic/") {
+                    let chatRoom = urlString[range.upperBound...]
+                    print(chatRoom)
+                    
+                    guard let tabBarController = window?.rootViewController as? UITabBarController else {
+                      return
+                    }
+                    
+    //                guard let viewControllers = tabBarController.viewControllers else { return }
+
+                    let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+                    let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
+                    vc.idConferencia = String(chatRoom)
+                    tabBarController.present(vc, animated: true, completion: nil)
+                } else {
+                    let chatRoom = "paciente_1"
+                                    
+                                    
+                    guard let tabBarController = window?.rootViewController as? UITabBarController else {
+                      return
+                    }
+                    
+    //                guard let viewControllers = tabBarController.viewControllers else { return }
+
+                    let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+                    let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
+                    vc.idConferencia = String(chatRoom)
+                    tabBarController.present(vc, animated: true, completion: nil)
+                }
+                    //self.redirectUniversalLinkScheme(url: urlPage)
+                
+                
+                
+                
+                
+            }
+    }
 
 
 }
