@@ -36,7 +36,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate, 
     //propiedades para jitsi
     fileprivate var pipViewCoordinator: PiPViewCoordinator?
     fileprivate var jitsiMeetView: JitsiMeetView?
-    var idConferencia = "asdasd"
+    var idConferencia = ""
     let conferenciaURL = "https://video.gema.clinic"
     
     
@@ -60,7 +60,7 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate, 
         
         let alertShowed = UserDefaults.standard.bool(forKey: "alertShowed")
         if alertShowed != true {
-            let alert = UIAlertController(title: "", message: "Este cuestionario es únicamente informativo y no representa un diagnóstico médico, si presentas algún deterioro en tu salud, solicita inmediatamente atención médica necesaria.", preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(title: "", message: "Para iniciar una teleconsulta presiona el botón médico, si quieres previamente puedes realizar el test médico", preferredStyle: UIAlertController.Style.alert)
             let okAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil)
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: nil)
@@ -193,6 +193,10 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate, 
                   self.btnCallDoctor.isEnabled = true
               } else {
                   self.btnCallDoctor.isEnabled = false
+                if curp != nil && curp != "" {
+                    self.callID = curp
+                    self.btnCallDoctor.isEnabled = true
+                }
               }
               
             }
@@ -460,13 +464,14 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate, 
 //        guard let url = URL(string: "https://video.e-clinic24.mx/\(self.callID ?? "")") else { return }
 //        UIApplication.shared.open(url)
         
-        let alert = UIAlertController(title: "¡Atención!", message: "Se ha enviado la solicitud a un médico que será responsable de su consulta, por favor espere un momento mientras el médico se conecta", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "¡Atención!", message: "En breve un médico se pondrá en contacto contigo, si no has llenado tus datos médicos te invitamos a que llenes esta información.", preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "Aceptar", style: UIAlertAction.Style.default, handler: {(alert: UIAlertAction) in
             
 //            let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
 //            let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
 //            vc.idConferencia = self.callID
 //            self.present(vc, animated: true, completion: nil)
+            self.idConferencia = self.callID
             self.openJitsiMeet()
             self.navigationController?.navigationBar.isHidden = true
         })
@@ -488,14 +493,16 @@ class TestViewController: UIViewController, RegisterDelegate, UserListDelegate, 
     
     //MARK: - Delegados
     func registerSucces(curp: String) {
-        let alert = UIAlertController(title: "", message: "Este cuestionario es únicamente informativo y no representa un diagnóstico médico, si presentas algún deterioro en tu salud, solicita inmediatamente atención médica necesaria.", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "", message: "Para iniciar una teleconsulta presiona el botón médico, si quieres previamente puedes realizar el test médico.", preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil)
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
         UserDefaults.standard.set(true, forKey: "alertShowed")
         
+        self.callID = curp
         self.resetForms()
         self.enableDisableForm()
+        self.btnCallDoctor.isEnabled = true
     }
     
     func userListRegisterNew() {

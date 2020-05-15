@@ -16,7 +16,7 @@ class VideoConsultaViewController: UIViewController, JitsiMeetViewDelegate {
     fileprivate var pipViewCoordinator: PiPViewCoordinator?
     fileprivate var jitsiMeetView: JitsiMeetView?
     
-    var idConferencia = "asdasd"
+    var idConferencia = ""
     let conferenciaURL = "https://video.gema.clinic"
     
     override func viewDidLoad() {
