@@ -18,7 +18,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let defaults = UserDefaults.standard
+        if !defaults.bool(forKey: "welcome-message") {
+            self.window = UIWindow(windowScene: windowScene)
+            let storyboard = UIStoryboard(name: "Login", bundle: nil)
+            let initialVC = storyboard.instantiateViewController(identifier: "BienvenidaViewController") as! BienvenidaViewController
+            self.window?.rootViewController = initialVC
+            self.window?.makeKeyAndVisible()
+            
+        } else {
+            self.window = UIWindow(windowScene: windowScene)
+            let storyboard = UIStoryboard(name: "Login", bundle: nil)
+            let initialVC = storyboard.instantiateViewController(identifier: "LoginViewController") as! LoginViewController
+            self.window?.rootViewController = initialVC
+            self.window?.makeKeyAndVisible()
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -50,11 +67,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        print(userActivity)
-        self.redirectUniversalLink(userActivity: userActivity)
+//        print(userActivity)
+//        self.redirectUniversalLink(userActivity: userActivity)
     }
     
-    func redirectUniversalLink(userActivity: NSUserActivity){
+    /*func redirectUniversalLink(userActivity: NSUserActivity){
             if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
                 
                 guard  let urlPage = userActivity.webpageURL else { return }
@@ -73,9 +90,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     //                guard let viewControllers = tabBarController.viewControllers else { return }
 
                     let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-                    let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
-                    vc.idConferencia = String(chatRoom)
-                    tabBarController.present(vc, animated: true, completion: nil)
+//                    let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
+//                    vc.idConferencia = String(chatRoom)
+//                    tabBarController.present(vc, animated: true, completion: nil)
                 } else {
                     let chatRoom = "paciente_1"
                                     
@@ -86,10 +103,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     
     //                guard let viewControllers = tabBarController.viewControllers else { return }
 
-                    let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-                    let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
-                    vc.idConferencia = String(chatRoom)
-                    tabBarController.present(vc, animated: true, completion: nil)
+//                    let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+//                    let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
+//                    vc.idConferencia = String(chatRoom)
+//                    tabBarController.present(vc, animated: true, completion: nil)
                 }
                     //self.redirectUniversalLinkScheme(url: urlPage)
                 
@@ -98,7 +115,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 
                 
             }
-    }
+    }*/
 
 
 }

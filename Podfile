@@ -13,11 +13,14 @@ target 'AMPM' do
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
+  pod 'Firebase/Auth'
   pod 'Loaf'
   pod 'CFAlertViewController'
   pod "KRProgressHUD"
   pod "RealmSwift"
   pod 'JitsiMeetSDK'
+  
+
   
   post_install do |installer|
     installer.pods_project.targets.each do |target|

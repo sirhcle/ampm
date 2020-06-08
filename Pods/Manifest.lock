@@ -168,6 +168,9 @@ PODS:
   - Eureka (5.2.1)
   - Firebase/Analytics (6.23.0):
     - Firebase/Core
+  - Firebase/Auth (6.23.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 6.5.2)
   - Firebase/Core (6.23.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 6.4.2)
@@ -189,6 +192,12 @@ PODS:
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (= 0.3.9011)
   - FirebaseAnalyticsInterop (1.5.0)
+  - FirebaseAuth (6.5.3):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.6)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.5)
+    - GoogleUtilities/Environment (~> 6.5)
+    - GTMSessionFetcher/Core (~> 1.1)
   - FirebaseAuthInterop (1.1.0)
   - FirebaseCore (6.6.7):
     - FirebaseCoreDiagnostics (~> 1.2)
@@ -270,6 +279,7 @@ PODS:
     - gRPC-Core/Interface (= 1.21.0)
     - nanopb (~> 0.3)
   - gRPC-Core/Interface (1.21.0)
+  - GTMSessionFetcher/Core (1.4.0)
   - JitsiMeetSDK (2.8.0)
   - KRActivityIndicatorView (3.0.5)
   - KRProgressHUD (3.4.5):
@@ -293,6 +303,7 @@ DEPENDENCIES:
   - CFAlertViewController
   - Eureka
   - Firebase/Analytics
+  - Firebase/Auth
   - Firebase/Core
   - Firebase/DynamicLinks
   - Firebase/Firestore
@@ -312,6 +323,7 @@ SPEC REPOS:
     - Firebase
     - FirebaseAnalytics
     - FirebaseAnalyticsInterop
+    - FirebaseAuth
     - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseCoreDiagnostics
@@ -326,6 +338,7 @@ SPEC REPOS:
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
+    - GTMSessionFetcher
     - JitsiMeetSDK
     - KRActivityIndicatorView
     - KRProgressHUD
@@ -345,6 +358,7 @@ SPEC CHECKSUMS:
   Firebase: 585ae467b3edda6a5444e788fda6888f024d8d6f
   FirebaseAnalytics: 558f7a03d19de451093032c806f39d5f9dff096e
   FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
+  FirebaseAuth: 7047aec89c0b17ecd924a550c853f0c27ac6015e
   FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
   FirebaseCore: a2788a0d5f6c1dff17b8f79b4a73654a8d4bfdbd
   FirebaseCoreDiagnostics: b59c024493a409f8aecba02c99928d0d8431d159
@@ -359,6 +373,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
+  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   JitsiMeetSDK: 080d1c247754d278c924bc584f0a2a8e32c4af62
   KRActivityIndicatorView: 912bc0413d98340f384b12a4e1e6aa8f42fb377d
   KRProgressHUD: df4cdc3a1baf708d4276a089ee34d133fa9a6f3e
@@ -370,6 +385,6 @@ SPEC CHECKSUMS:
   Realm: 4eb04d7487bd43c0581256f40b424eafb711deff
   RealmSwift: 3eb8924ff7100df5928c7602f71d0fec51e7c9c5
 
-PODFILE CHECKSUM: d6bd4c308778374c1690465f00f6b431b5b24dcb
+PODFILE CHECKSUM: 621f664d897a32ee8ec3a208aedc8a87eb387b86
 
 COCOAPODS: 1.8.4
