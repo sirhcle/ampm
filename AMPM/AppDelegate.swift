@@ -21,6 +21,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let defaults = UserDefaults.standard
+        if !defaults.bool(forKey: "welcome-message") {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            let storyboard = UIStoryboard(name: "Login", bundle: nil)
+            let initialVC = storyboard.instantiateViewController(identifier: "BienvenidaViewController") as! BienvenidaViewController
+            self.window?.rootViewController = initialVC
+            self.window?.makeKeyAndVisible()
+        }
+        else {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            let storyboard = UIStoryboard(name: "Login", bundle: nil)
+            let initialVC = storyboard.instantiateViewController(identifier: "LoginViewController") as! LoginViewController
+            self.window?.rootViewController = initialVC
+            self.window?.makeKeyAndVisible()
+        }
         FirebaseApp.configure()
         return true
     }
@@ -63,33 +78,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
             
             guard  let urlPage = userActivity.webpageURL else { return }
-            print(urlPage)
+            //print(urlPage)
             
             let urlString = urlPage.absoluteString
             
-            if let range = urlString.range(of: "https://www.gema.clinic/") {
-                let chatRoom = urlString[range.upperBound...]
-                print(chatRoom)
+//            if let range = urlString.range(of: "https://www.gema.clinic/") {
+//                let chatRoom = urlString[range.upperBound...]
+//                print(chatRoom)
                 
-                guard let tabBarController = window?.rootViewController as? UITabBarController else {
-                  return
-                }
+//                guard let tabBarController = window?.rootViewController as? UITabBarController else {
+//                  return
+//                }
                 
 //                guard let viewControllers = tabBarController.viewControllers else { return }
 
-                let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-                let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
-                vc.idConferencia = String(chatRoom)
-                tabBarController.present(vc, animated: true, completion: nil)
-            }
-                //self.redirectUniversalLinkScheme(url: urlPage)
-            
-            
-            
-            
-            
+//                let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+//                let vc = storyBoard.instantiateViewController(withIdentifier: "VideoConsultaViewController") as! VideoConsultaViewController
+//                vc.idConferencia = String(chatRoom)
+//                tabBarController.present(vc, animated: true, completion: nil)
+//            }
         }
-        
     }
     
 //    func redirectUniversalLinkScheme(url: URL){
